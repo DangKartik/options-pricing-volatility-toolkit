@@ -1,0 +1,73 @@
+{
+  "frozen_at_utc": "2026-11-15T10:09:44+00:00",
+  "note": "Chosen on in-sample entries only; written before any out-of-sample trade is run.",
+  "in_sample": [
+    "2004-03-01",
+    "2018-12-31"
+  ],
+  "out_of_sample_start": "2019-01-01",
+  "iv_haircut": 0.02,
+  "hedge_every": 2,
+  "hedge_vol": "current",
+  "option_half_spread_vol": 0.005,
+  "hedge_cost_bps": 1.0,
+  "dividend_yield": 0.018,
+  "strike_rule": "ATM forward K = S0 exp((r - q) T)",
+  "tenor": "nearest trading day to entry + 30 calendar days, capped at next entry",
+  "entry_rule_threshold": 0.05,
+  "entry_rule": "sell only if VIX_close - RV21_close > threshold (RV21: 21 returns ending at entry)",
+  "selection": {
+    "hedge_every_is_net_sharpe": {
+      "1": 0.5141711670432579,
+      "2": 0.7279436743166503,
+      "5": 0.2987397618092159
+    },
+    "hedge_every_paired_t_vs_daily_net_bps": {
+      "2": 1.716828025589015,
+      "5": -0.3790519774058828
+    },
+    "threshold_is_table": {
+      "0.00": {
+        "n_trades": 157,
+        "sharpe_incl_flat": 0.769639881228272,
+        "mean_per_month_bps": 23.566092793790435
+      },
+      "0.01": {
+        "n_trades": 143,
+        "sharpe_incl_flat": 0.7808095786073274,
+        "mean_per_month_bps": 22.689099769252984
+      },
+      "0.02": {
+        "n_trades": 126,
+        "sharpe_incl_flat": 0.8069829373398568,
+        "mean_per_month_bps": 21.50711637512268
+      },
+      "0.03": {
+        "n_trades": 109,
+        "sharpe_incl_flat": 0.7208030172116958,
+        "mean_per_month_bps": 18.003127387895844
+      },
+      "0.04": {
+        "n_trades": 84,
+        "sharpe_incl_flat": 0.8226288809399697,
+        "mean_per_month_bps": 18.546514452071836
+      },
+      "0.05": {
+        "n_trades": 62,
+        "sharpe_incl_flat": 0.847126159014277,
+        "mean_per_month_bps": 15.815535058547866
+      },
+      "0.06": {
+        "n_trades": 39,
+        "sharpe_incl_flat": 0.6402107933851489,
+        "mean_per_month_bps": 10.04920132900583
+      }
+    },
+    "a_priori": [
+      "iv_haircut",
+      "costs",
+      "hedge_vol",
+      "dividend_yield"
+    ]
+  }
+}
