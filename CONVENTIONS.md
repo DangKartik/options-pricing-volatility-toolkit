@@ -1,4 +1,6 @@
-# volkit conventions (binding for every module)
+# volkit conventions
+
+Shared by every module, so that pricers, Greeks and the backtest can be swapped without unit conversions.
 
 ## Symbols and units
 - `S` spot, `K` strike, `T` time to expiry in **years**, `r` continuously
@@ -38,7 +40,7 @@ volkit/data/
 ## Code rules
 - Python 3.14, numpy/scipy/pandas/matplotlib only (plus yfinance in data/).
 - Type hints and a short docstring on every public function. The docstring
-  states the formula or method in one or two lines; no essays.
+  states the formula or method in one or two lines.
 - No silent failure: invalid inputs raise `ValueError`.
 - Tests use pytest, live in `tests/test_<module>.py`, must be deterministic
   (fixed seeds) and must not touch the network.
