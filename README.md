@@ -55,7 +55,7 @@ Conventions (decimal rates and vols, `T` in years ACT/365) are in [CONVENTIONS.m
 
 ### Install and run
 
-Developed with Python 3.14 (`pyproject.toml` allows 3.11+, untested).
+Developed on Python 3.14; the test suite runs in CI on Python 3.11, 3.12 and 3.13.
 
 ```bash
 python -m venv .venv
