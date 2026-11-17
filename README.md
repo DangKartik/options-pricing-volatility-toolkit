@@ -2,7 +2,9 @@
 
 **Options pricing, implied-volatility surfaces, and a delta-hedged short-volatility backtest, written up as a research note.**
 
-![license](https://img.shields.io/badge/license-MIT-blue) ![python](https://img.shields.io/badge/python-3.11%2B-blue) ![tests](https://img.shields.io/badge/tests-1496%20passing-brightgreen)
+[![tests](https://github.com/DangKartik/options-pricing-volatility-toolkit/actions/workflows/tests.yml/badge.svg)](https://github.com/DangKartik/options-pricing-volatility-toolkit/actions/workflows/tests.yml) ![python](https://img.shields.io/badge/python-3.11%2B-blue) ![license](https://img.shields.io/badge/license-MIT-blue)
+
+**Topics:** options pricing · Black-Scholes-Merton · binomial trees · Monte Carlo · Greeks · implied volatility · volatility surface · no-arbitrage checks · delta hedging · volatility risk premium · out-of-sample backtesting · Python
 
 **Question.** Is S&P 500 implied volatility systematically higher than the volatility that follows, and would a delta-hedged short straddle have earned that gap after costs?
 
