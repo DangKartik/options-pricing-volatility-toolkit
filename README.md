@@ -1,54 +1,78 @@
-# volkit: option pricing, an SPY vol surface, and a test of the volatility risk premium
+# volkit
+
+**Options pricing, implied-volatility surfaces, and a delta-hedged short-volatility backtest, written up as a research note.**
+
+![license](https://img.shields.io/badge/license-MIT-blue) ![python](https://img.shields.io/badge/python-3.11%2B-blue) ![tests](https://img.shields.io/badge/tests-1496%20passing-brightgreen)
 
 **Question.** Is S&P 500 implied volatility systematically higher than the volatility that follows, and would a delta-hedged short straddle have earned that gap after costs?
 
-**Answer, as far as this data allows.** The first part holds in vol terms. Over 272 months (March 2004 to October 2026), VIX exceeded the realised S&P 500 vol of the next 30 calendar days by 3.66 vol points on average, and was higher in 83.5% of months (t = 7.56). The second part does not hold up statistically. Without historical option quotes, straddles are priced synthetically at VIX minus an assumed 2 vol-point haircut. On that basis, always selling made 27.4 bp of notional per month out of sample (2019 onwards) after assumed costs: t = 1.79, Sharpe 0.64, bootstrap 95% CI [-0.07, 1.69]. A conditional-entry variant looks better on paper, but its improvement over always-selling is within noise (section 5). The result also hinges on the haircut, which I cannot measure. Break-even is 3.21 (in-sample) to 3.27 (out-of-sample) vol points, and on the two dates with usable quotes, VIX was about 4.1 (SPY, 13 Nov) and 5.0 (SPX, 16 Nov) vol points above 30-day ATM implied vol.
+<table>
+<tr>
+<td width="50%"><img src="figures/smile_spx.png" alt="SPX implied-volatility smiles, 16 Nov 2026"></td>
+<td width="50%"><img src="figures/cumulative_pnl.png" alt="Cumulative P&L of the delta-hedged short straddle"></td>
+</tr>
+<tr>
+<td align="center"><sub>SPX smiles from the 16 Nov 2026 close</sub></td>
+<td align="center"><sub>Hedged short straddle P&amp;L (synthetic prices; shaded = out of sample)</sub></td>
+</tr>
+</table>
+
+## Key results
+
+| | Result |
+|---|---|
+| **Is implied vol above realised vol?** | Yes. Over 272 months (Mar 2004 to Oct 2026), VIX exceeded the next 30 days' realised S&P 500 vol by **3.66 vol points** on average, in **83.5%** of months (t = 7.56). |
+| **Does a hedged short straddle capture it?** | Not reliably. Out of sample (2019 on), after assumed costs: **+27.4 bp per month, t = 1.79, Sharpe 0.64, 95% CI [-0.07, 1.69]**. That is not statistically significant. |
+| **What does it depend on?** | The gap between VIX and at-the-money implied vol (the "haircut"), which I cannot observe historically. Net break-even is **3.2 to 3.3 vol points**; on the two dates with usable quotes the gap was **4.1** (SPY, 13 Nov) and **5.0** (SPX, 16 Nov), above break-even. |
+| **Do the pricers agree?** | Black-Scholes, a binomial tree and Monte Carlo agree within Monte Carlo error, and analytic and finite-difference Greeks match. 1,496 tests. |
+
+**Read this first.** There are no historical option quotes in this project. The backtest prices straddles synthetically (Black-Scholes at VIX minus an assumed haircut, with assumed costs), so it tests whether VIX exceeds realised vol, not whether the strategy made money on real quotes. A conditional-entry variant looks better on paper, but its improvement is within noise (section 5). All parameters were frozen on 2004-2018 data before the single out-of-sample run.
+
+**Contents:** [1. Repo and reproduction](#1-whats-in-the-repo) · [2. Pricing library](#2-pricing-library) · [3. Implied vol and surfaces](#3-implied-volatility-and-volatility-surfaces) · [4. Backtest](#4-backtest) · [5. What did not work](#5-what-did-not-work) · [6. Limitations](#6-limitations) · [7. Next steps](#7-what-i-would-do-next-with-real-data)
 
 ---
 
-## 1. What is in the repo
+## 1. What's in the repo
 
-```
-volkit/
-  pricing/black_scholes.py   closed-form BSM prices and analytic Greeks, with dividend yield q
-  pricing/binomial.py        Cox-Ross-Rubinstein tree, European and American exercise
-  pricing/monte_carlo.py     GBM Monte Carlo with antithetic variates and a standard error
-  pricing/greeks.py          central finite-difference Greeks around any pricer
-  iv/solver.py               implied vol: Newton with analytic vega, Brent fallback; American tree inversion
-  iv/surface.py              parity forward, OTM quote selection, total-variance surface, arbitrage checks
-  data/market.py             S&P 500, VIX family and 3m T-bill series, cached as CSV
-  data/chain.py              option-chain snapshot download (yfinance), quote cleaning
-  backtest/delta_hedge.py    exact self-financing P&L of a delta-hedged option book held to expiry
-  backtest/costs.py          option half-spread and hedge-slippage assumptions
-  backtest/metrics.py        realised vol, t-stat, Sharpe, bootstrap CI, drawdown
-scripts/  download_data.py, build_surface.py, run_backtest.py
-tests/    one pytest file per module plus cross-pricer agreement tests
-data/raw/ NOT in the repo (git-ignored): created by scripts/download_data.py
-results/  JSON/CSV outputs quoted below;  figures/  PNGs embedded below
-```
+| Path | What it does |
+|---|---|
+| `volkit/pricing/black_scholes.py` | Black-Scholes-Merton prices and analytic Greeks, with dividend yield |
+| `volkit/pricing/binomial.py` | Cox-Ross-Rubinstein tree, European and American exercise |
+| `volkit/pricing/monte_carlo.py` | Monte Carlo with antithetic variates and a standard error |
+| `volkit/pricing/greeks.py` | Central finite-difference Greeks around any pricer |
+| `volkit/iv/solver.py` | Implied vol: Newton with analytic vega, Brent fallback, American tree inversion |
+| `volkit/iv/surface.py` | Parity forward, OTM quote selection, total-variance surface, arbitrage checks |
+| `volkit/data/market.py`, `chain.py` | S&P 500, VIX family and T-bill series; option-chain download and cleaning |
+| `volkit/backtest/` | Exact self-financing hedging P&L, cost model, metrics (Sharpe, bootstrap CI, drawdown) |
+| `scripts/` | `download_data.py`, `build_surface.py`, `run_backtest.py` |
+| `tests/` | One pytest file per module plus cross-pricer agreement tests |
+| `results/`, `figures/` | My outputs, quoted and embedded below |
+| `data/raw/` | **Not in the repo** (git-ignored); created by `scripts/download_data.py` |
 
 Conventions (decimal rates and vols, `T` in years ACT/365) are in [CONVENTIONS.md](CONVENTIONS.md).
 
-**Install and reproduce.** Developed with Python 3.14 (`pyproject.toml` allows 3.11+, untested). Dependencies: numpy, scipy, pandas, matplotlib, yfinance; pytest for development.
+### Install and run
+
+Developed with Python 3.14 (`pyproject.toml` allows 3.11+, untested).
 
 ```bash
 python -m venv .venv
 .venv/bin/pip install -e ".[dev]"
-.venv/bin/python -m pytest -q                 # 1496 passed; the tests use synthetic data and need no download
-.venv/bin/python scripts/download_data.py     # downloads the market data into data/raw/ (needs network)
+.venv/bin/python -m pytest -q                 # 1496 passed; tests use synthetic data, no download needed
+.venv/bin/python scripts/download_data.py     # downloads market data into data/raw/ (needs network)
 ```
-
-**The raw market data is not included in this repository.** It comes from Yahoo Finance (option chains, S&P 500), CBOE (VIX family) and FRED (3-month T-bill), and I do not redistribute third-party data. `scripts/download_data.py` downloads it into `data/raw/` (git-ignored); it prints what it saved, including `spx_chain_<date>.csv`, and also saves `spy_chain_<date>.csv` if the SPX quotes have too few bids (for example when the market is closed). Yahoo only serves the current chain, so **a fresh download will give different numbers from the ones in this README**, which come from snapshots taken on 15 November 2026 (SPY and a weekend SPX chain) and 17 November 2026 (SPX, carrying 16 November's close). The history series (S&P 500, VIX, rates) will also have extra days. The committed files in `results/` and `figures/` are my outputs from those snapshots.
 
 Then run the analysis, giving `--snapshot` the chain file the download printed:
 
 ```bash
-.venv/bin/python scripts/build_surface.py --snapshot data/raw/spy_chain_<date>.csv   # surface -> results/surface_*, figures/*
+.venv/bin/python scripts/build_surface.py --snapshot data/raw/spy_chain_<date>.csv
 .venv/bin/python scripts/build_surface.py --snapshot data/raw/spx_chain_<date>.csv --skip-bias-study
 .venv/bin/python scripts/run_backtest.py      # Parts A and B -> results/backtest_*, frozen_params.json, figures
 ```
 
-If `data/raw/` is empty, both scripts stop with a message telling you to run the download script first. Running them overwrites the committed results and figures with the new numbers.
+### About the data
+
+The raw market data is **not included**: it comes from Yahoo Finance (option chains, S&P 500), CBOE (VIX family) and FRED (3-month T-bill), and I do not redistribute third-party data. Yahoo only serves the current chain, so **a fresh download gives different numbers from the ones in this README**, which come from snapshots taken on 15 November 2026 (SPY, plus a weekend SPX chain) and 17 November 2026 (SPX, carrying 16 November's close). The history series will also have extra days. If `data/raw/` is empty, both scripts stop with a message telling you to run the download script first. Running them overwrites the committed `results/` and `figures/` with the new numbers.
 
 ## 2. Pricing library
 
@@ -73,7 +97,7 @@ The MC estimates are 1.66 and 1.67 standard errors below Black-Scholes (same pat
 
 The delta gap is truncation error from the large default bump; a 0.01% bump recovers 0.63683.
 
-## 3. Implied volatility and the SPY surface
+## 3. Implied volatility and volatility surfaces
 
 **Solver.** Newton-Raphson with analytic vega inside a shrinking bracket, falling back to Brent if a step leaves the bracket, vega is tiny or it fails to converge. Prices outside no-arbitrage bounds return `nan`.
 
