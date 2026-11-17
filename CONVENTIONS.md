@@ -43,4 +43,3 @@ volkit/data/
 - Tests use pytest, live in `tests/test_<module>.py`, must be deterministic
   (fixed seeds) and must not touch the network.
 - Run tests with `.venv/bin/python -m pytest -q` from the repo root.
-- Do not commit. Do not edit files outside your assigned ones.
