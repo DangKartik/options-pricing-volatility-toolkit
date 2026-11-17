@@ -1,8 +1,15 @@
-# volkit
+<h1 align="center">volkit</h1>
 
-**Options pricing, implied-volatility surfaces, and a delta-hedged short-volatility backtest, written up as a research note.**
+<p align="center"><b>Options pricing, implied-volatility surfaces, and a delta-hedged short-volatility backtest, written up as a research note.</b></p>
 
-[![tests](https://github.com/DangKartik/options-pricing-volatility-toolkit/actions/workflows/tests.yml/badge.svg)](https://github.com/DangKartik/options-pricing-volatility-toolkit/actions/workflows/tests.yml) ![python](https://img.shields.io/badge/python-3.11%2B-blue) ![license](https://img.shields.io/badge/license-MIT-blue)
+<p align="center">
+  <a href="https://github.com/DangKartik/options-pricing-volatility-toolkit/actions/workflows/tests.yml"><img alt="tests" src="https://github.com/DangKartik/options-pricing-volatility-toolkit/actions/workflows/tests.yml/badge.svg"></a>
+  <img alt="python" src="https://img.shields.io/badge/python-3.11%20%7C%203.12%20%7C%203.13-3776AB?logo=python&logoColor=white">
+  <img alt="license" src="https://img.shields.io/badge/license-MIT-2ea44f">
+  <img alt="NumPy" src="https://img.shields.io/badge/NumPy-013243?logo=numpy&logoColor=white">
+  <img alt="SciPy" src="https://img.shields.io/badge/SciPy-8CAAE6?logo=scipy&logoColor=white">
+  <img alt="pandas" src="https://img.shields.io/badge/pandas-150458?logo=pandas&logoColor=white">
+</p>
 
 **Topics:** options pricing · Black-Scholes-Merton · binomial trees · Monte Carlo · Greeks · implied volatility · volatility surface · no-arbitrage checks · delta hedging · volatility risk premium · out-of-sample backtesting · Python
 
