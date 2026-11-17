@@ -41,6 +41,31 @@ def cache_dir_path(cache_dir: str | Path | None = None) -> Path:
     return Path(env) if env else DEFAULT_CACHE_DIR
 
 
+def require_cached(*paths: str | Path, cache_dir: str | Path | None = None, hint: str = "") -> None:
+    """Exit with a clear message if any needed data file is missing.
+
+    The raw market data is not part of the git repository (third-party data, not
+    redistributed). Analysis scripts call this first so that a fresh clone fails with
+    instructions instead of silently downloading new data and producing different numbers.
+    Bare file names are looked up in the cache directory; other paths are used as given.
+    """
+    base = cache_dir_path(cache_dir)
+    missing = []
+    for p in paths:
+        p = Path(p)
+        full = p if p.is_absolute() or p.parent != Path(".") else base / p
+        if not full.exists():
+            missing.append(str(full))
+    if missing:
+        raise SystemExit(
+            "Missing market data file(s):\n  " + "\n  ".join(missing) + "\n"
+            "The raw data (Yahoo Finance, CBOE, FRED) is not included in this repository.\n"
+            "Run `python scripts/download_data.py` first to download it into data/raw/.\n"
+            "A fresh download gives different numbers from those in the README, which come "
+            "from the 15-17 Nov 2026 snapshots." + (f"\n{hint}" if hint else "")
+        )
+
+
 # --------------------------------------------------------------------------
 # download helpers (network)
 # --------------------------------------------------------------------------

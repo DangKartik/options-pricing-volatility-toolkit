@@ -43,7 +43,9 @@ import matplotlib.pyplot as plt  # noqa: E402
 from scipy.stats import norm  # noqa: E402
 
 from volkit.data.chain import clean_chain, filter_report, load_chain  # noqa: E402
-from volkit.data.market import load_rates, load_vix_family  # noqa: E402
+from volkit.data.market import (  # noqa: E402
+    RATES_FILE, VIX_FAMILY_FILE, load_rates, load_vix_family, require_cached,
+)
 from volkit.iv.solver import implied_vol_american  # noqa: E402
 from volkit.iv.surface import (  # noqa: E402
     build_surface,
@@ -338,6 +340,9 @@ def main(argv: list[str] | None = None) -> int:
     ap.add_argument("--skip-bias-study", action="store_true")
     args = ap.parse_args(argv)
 
+    require_cached(args.snapshot, RATES_FILE, VIX_FAMILY_FILE,
+                   hint="Then pass the chain file the download script saved, e.g. "
+                        "`--snapshot data/raw/spx_chain_<date>.csv` (or spy_chain_<date>.csv).")
     raw = load_chain(args.snapshot)
     ticker = str(raw["ticker"].iloc[0]).lstrip("^")
     spot = float(raw["spot"].iloc[0])

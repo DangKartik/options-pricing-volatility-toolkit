@@ -48,7 +48,10 @@ import matplotlib.pyplot as plt  # noqa: E402
 from volkit.backtest import metrics  # noqa: E402
 from volkit.backtest.costs import BASE_COSTS, CostModel  # noqa: E402
 from volkit.backtest.delta_hedge import delta_hedge_pnl, straddle  # noqa: E402
-from volkit.data.market import align_to_calendar, load_rates, load_spx, load_vix  # noqa: E402
+from volkit.data.market import (  # noqa: E402
+    RATES_FILE, SPX_FILE, VIX_FILE, align_to_calendar, load_rates, load_spx, load_vix,
+    require_cached,
+)
 
 ROOT = Path(__file__).resolve().parents[1]
 RESULTS = ROOT / "results"
@@ -601,6 +604,7 @@ def _jsonable(o):
 
 
 def main(stage: str) -> None:
+    require_cached(SPX_FILE, VIX_FILE, RATES_FILE)   # clear error if data/raw is empty
     RESULTS.mkdir(exist_ok=True)
     FIGURES.mkdir(exist_ok=True)
     mkt = load_market()

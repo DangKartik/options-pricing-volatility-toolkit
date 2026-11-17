@@ -4,3 +4,6 @@ __pycache__/
 .pytest_cache/
 .DS_Store
 *.egg-info/
+
+# Raw market data (Yahoo Finance, CBOE, FRED): not redistributed. Run scripts/download_data.py.
+data/raw/

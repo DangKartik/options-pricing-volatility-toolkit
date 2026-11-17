@@ -248,3 +248,19 @@ def test_align_to_calendar_forward_fills_holidays():
     assert out.index.equals(pd.DatetimeIndex(cal))
     with pytest.raises(ValueError):
         market.align_to_calendar(rates, pd.to_datetime(["2023-12-29"]))
+
+
+def test_require_cached_missing_gives_clear_message(tmp_path):
+    from volkit.data.market import require_cached
+
+    with pytest.raises(SystemExit) as exc:
+        require_cached("spx.csv", cache_dir=tmp_path, hint="extra hint")
+    msg = str(exc.value)
+    assert "download_data.py" in msg and "spx.csv" in msg and "extra hint" in msg
+
+
+def test_require_cached_passes_when_files_exist(tmp_path):
+    from volkit.data.market import require_cached
+
+    (tmp_path / "spx.csv").write_text("date,spx\n")
+    require_cached("spx.csv", cache_dir=tmp_path)  # no exception

@@ -23,7 +23,7 @@ volkit/
   backtest/metrics.py        realised vol, t-stat, Sharpe, bootstrap CI, drawdown
 scripts/  download_data.py, build_surface.py, run_backtest.py
 tests/    one pytest file per module plus cross-pricer agreement tests
-data/raw/ cached inputs (SPX, VIX, VIX9D/VIX3M, DTB3, SPY and SPX chain snapshots)
+data/raw/ NOT in the repo (git-ignored): created by scripts/download_data.py
 results/  JSON/CSV outputs quoted below;  figures/  PNGs embedded below
 ```
 
@@ -34,13 +34,21 @@ Conventions (decimal rates and vols, `T` in years ACT/365) are in [CONVENTIONS.m
 ```bash
 python -m venv .venv
 .venv/bin/pip install -e ".[dev]"
-.venv/bin/python -m pytest -q                 # 1494 passed
-.venv/bin/python scripts/build_surface.py     # SPY surface -> results/surface_*, figures/*_spy.png
-.venv/bin/python scripts/build_surface.py --snapshot data/raw/spx_chain_20261117.csv --skip-bias-study   # SPX surface
+.venv/bin/python -m pytest -q                 # 1496 passed; the tests use synthetic data and need no download
+.venv/bin/python scripts/download_data.py     # downloads the market data into data/raw/ (needs network)
+```
+
+**The raw market data is not included in this repository.** It comes from Yahoo Finance (option chains, S&P 500), CBOE (VIX family) and FRED (3-month T-bill), and I do not redistribute third-party data. `scripts/download_data.py` downloads it into `data/raw/` (git-ignored); it prints what it saved, including `spx_chain_<date>.csv`, and also saves `spy_chain_<date>.csv` if the SPX quotes have too few bids (for example when the market is closed). Yahoo only serves the current chain, so **a fresh download will give different numbers from the ones in this README**, which come from snapshots taken on 15 November 2026 (SPY and a weekend SPX chain) and 17 November 2026 (SPX, carrying 16 November's close). The history series (S&P 500, VIX, rates) will also have extra days. The committed files in `results/` and `figures/` are my outputs from those snapshots.
+
+Then run the analysis, giving `--snapshot` the chain file the download printed:
+
+```bash
+.venv/bin/python scripts/build_surface.py --snapshot data/raw/spy_chain_<date>.csv   # surface -> results/surface_*, figures/*
+.venv/bin/python scripts/build_surface.py --snapshot data/raw/spx_chain_<date>.csv --skip-bias-study
 .venv/bin/python scripts/run_backtest.py      # Parts A and B -> results/backtest_*, frozen_params.json, figures
 ```
 
-Both analysis scripts read only the cache in `data/raw/` and run offline. `scripts/download_data.py` refreshes it from Yahoo Finance, CBOE and FRED, which would change the numbers below.
+If `data/raw/` is empty, both scripts stop with a message telling you to run the download script first. Running them overwrites the committed results and figures with the new numbers.
 
 ## 2. Pricing library
 
@@ -148,7 +156,7 @@ In variance units (what a variance swap pays) the evidence is much weaker: VIX²
 
 **Part B design.** At each month's first close, sell one straddle struck at the forward, K = S₀ exp((r − q)T), expiring on the trading day nearest entry + 30 days (capped at the next entry, so no overlap). Options are priced by Black-Scholes at VIX − haircut, delta-hedged at the close every 2 days at that day's VIX − haircut, and cash settled. Assumptions, not measurements: haircut 2 vol points; option half-spread 0.5 vol points × vega, paid at entry; hedge cost 1 bp of notional traded; q = 1.8%. P&L is in bp of entry spot, and `delta_hedge.py` decomposes it exactly into premium, payoff, hedge P&L, dividends, financing and costs.
 
-**Protocol.** Everything was chosen on in-sample entries (2004-03 to 2018-12). Haircut, costs, hedge vol and q were fixed a priori. Tuned on in-sample net Sharpe: hedge frequency from {1, 2, 5} days (2 won: 0.73 vs 0.51 and 0.30), and an optional entry filter (sell only if VIX minus trailing 21-day RV exceeds a threshold) from seven thresholds 0 to 0.06 (0.05 won). These go into [`results/frozen_params.json`](results/frozen_params.json); the out-of-sample step reads only that file and runs the 2019+ trades once. OOS sensitivities are reported, never used to choose. Re-running both scripts from the cache in a copy of the repo gave identical results apart from the frozen file's timestamp. One weakness: `run_backtest.py` re-runs the in-sample calibration and rewrites `frozen_params.json` on every run, so the file's timestamp does not prove the order of events. The git history of the file, and the fact that its values never change between runs, are the better evidence.
+**Protocol.** Everything was chosen on in-sample entries (2004-03 to 2018-12). Haircut, costs, hedge vol and q were fixed a priori. Tuned on in-sample net Sharpe: hedge frequency from {1, 2, 5} days (2 won: 0.73 vs 0.51 and 0.30), and an optional entry filter (sell only if VIX minus trailing 21-day RV exceeds a threshold) from seven thresholds 0 to 0.06 (0.05 won). These go into [`results/frozen_params.json`](results/frozen_params.json); the out-of-sample step reads only that file and runs the 2019+ trades once. OOS sensitivities are reported, never used to choose. Re-running both scripts on the same cached data, in a copy of the repo, gave identical results apart from the frozen file's timestamp. One weakness: `run_backtest.py` re-runs the in-sample calibration and rewrites `frozen_params.json` on every run, so the file's timestamp does not prove the order of events. The git history of the file, and the fact that its values never change between runs, are the better evidence.
 
 **Part B results** (bp of notional per trade; Sharpe annualised with sqrt(12); bootstrap CIs):
 
