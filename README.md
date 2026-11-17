@@ -2,7 +2,7 @@
 
 **Question.** Is S&P 500 implied volatility systematically higher than the volatility that follows, and would a delta-hedged short straddle have earned that gap after costs?
 
-**Answer, as far as this data allows.** The first part holds in vol terms. Over 272 months (March 2004 to October 2026), VIX exceeded the realised S&P 500 vol of the next 30 calendar days by 3.66 vol points on average, and was higher in 83.5% of months (t = 7.56). The second part does not hold up statistically. Without historical option quotes, straddles are priced synthetically at VIX minus an assumed 2 vol-point haircut. On that basis, always selling made 27.4 bp of notional per month out of sample (2019 onwards) after assumed costs: t = 1.79, Sharpe 0.64, bootstrap 95% CI [-0.07, 1.69]. A conditional-entry variant looks better on paper, but its improvement over always-selling is within noise (section 5). The result also hinges on the haircut, which I cannot measure. Break-even is 3.21 (in-sample) to 3.27 (out-of-sample) vol points, and on the one date with quotes, VIX was about 4.1 vol points above 30-day ATM implied vol.
+**Answer, as far as this data allows.** The first part holds in vol terms. Over 272 months (March 2004 to October 2026), VIX exceeded the realised S&P 500 vol of the next 30 calendar days by 3.66 vol points on average, and was higher in 83.5% of months (t = 7.56). The second part does not hold up statistically. Without historical option quotes, straddles are priced synthetically at VIX minus an assumed 2 vol-point haircut. On that basis, always selling made 27.4 bp of notional per month out of sample (2019 onwards) after assumed costs: t = 1.79, Sharpe 0.64, bootstrap 95% CI [-0.07, 1.69]. A conditional-entry variant looks better on paper, but its improvement over always-selling is within noise (section 5). The result also hinges on the haircut, which I cannot measure. Break-even is 3.21 (in-sample) to 3.27 (out-of-sample) vol points, and on the two dates with usable quotes, VIX was about 4.1 (SPY, 13 Nov) and 5.0 (SPX, 16 Nov) vol points above 30-day ATM implied vol.
 
 ---
 
@@ -36,6 +36,7 @@ python -m venv .venv
 .venv/bin/pip install -e ".[dev]"
 .venv/bin/python -m pytest -q                 # 1494 passed
 .venv/bin/python scripts/build_surface.py     # SPY surface -> results/surface_*, figures/*_spy.png
+.venv/bin/python scripts/build_surface.py --snapshot data/raw/spx_chain_20261117.csv --skip-bias-study   # SPX surface
 .venv/bin/python scripts/run_backtest.py      # Parts A and B -> results/backtest_*, frozen_params.json, figures
 ```
 
@@ -68,7 +69,7 @@ The delta gap is truncation error from the large default bump; a 0.01% bump reco
 
 **Solver.** Newton-Raphson with analytic vega inside a shrinking bracket, falling back to Brent if a step leaves the bracket, vega is tiny or it fails to converge. Prices outside no-arbitrage bounds return `nan`.
 
-**Data.** A SPY chain from Yahoo Finance, downloaded on Sunday 2026-11-15, so the quotes are the Friday 2026-11-13 close; `T` is measured from Friday 16:00 New York (measuring from the download time would raise the 10-day ATM IV from 14.79% to 15.98%). The SPX chain downloaded at the same time was unusable: only 5% of its 20,894 rows had a bid, and one expiry survived cleaning, so no SPX surface was built.
+**Data.** A SPY chain from Yahoo Finance, downloaded on Sunday 2026-11-15, so the quotes are the Friday 2026-11-13 close; `T` is measured from Friday 16:00 New York (measuring from the download time would raise the 10-day ATM IV from 14.79% to 15.98%). The SPX chain downloaded at the same time was unusable: only 5% of its 20,894 rows had a bid, and one expiry survived cleaning. A second SPX chain, downloaded on Tuesday 2026-11-17 at 08:59 UTC (about 4am New York, before the open), carried Monday 2026-11-16's closing quotes with bids on 94% of 20,481 rows, and is the basis of the SPX surface below (`T` measured from Monday 16:00 New York).
 
 **Method.**
 
@@ -105,6 +106,24 @@ The delta gap is truncation error from the large default bump; a 0.01% bump reco
 
 ![SPY total variance](figures/total_variance_spy.png)
 *Total variance by expiry; curves do not cross. The small kinks visible in two curves are in quarter-end expiries (138 and 321 days).*
+
+### SPX surface (16 Nov 2026 close)
+
+Same pipeline, run on the SPX snapshot (`results/surface_summary.json`, key `SPX`). SPX options are European and cash-settled, so Black-Scholes inversion is exact and no early-exercise correction applies. (The summary file also contains a European-vs-American table for SPX; it is a by-product of the script and is not meaningful for these options.) 16 November was a stress day: the S&P 500 fell 1.9% from Friday's close (7,561.67 to 7,416.59) and VIX rose from 19.30 to 22.91.
+
+- **Cleaning:** 20,481 rows in; removed 1,270 (bid < $0.05), 111 (crossed), 1,156 (spread > 25%), 1,567 (< 7 days), 120 (> 800 days), 1,452 (moneyness); 14,805 clean rows. The surface has 46 expiries and 8,698 OTM quotes after the outlier rule removed 60 (54 of them in the March, June and September 2027 quarter-end expiries).
+- **30-day ATM IV 17.96% vs VIX 22.91%**, a 4.95-point gap, again with VIX above ATM IV (VIX9D 23.15 and VIX3M 23.02).
+- **30-day 25-delta risk reversal 7.15 vol points** (put 22.42%, call 15.27%).
+- **ATM term structure is inverted:** 20.44% (9d), 17.96% (30d), 17.02% (93d), 17.79% (365d), as expected after a sell-off.
+- **Parity works as expected on a European chain.** The regression discount rate for 95-to-213-day expiries is 4.5-5.1% against the 4.22% T-bill (noisy at short expiries), unlike SPY, where early exercise pushed it negative. The implied dividend yield at short expiries is still not meaningful (14% at 7 days): forward × DF implies a spot of about 7,390-7,397 against the reported 7,416.59, the same spot-versus-option-close timing mismatch seen on SPY.
+- **Arbitrage checks:** calendar 7 violations out of 1,845 grid points (one pair of expiries, 22 and 24 December, largest shortfall 0.0001 in total variance). Butterfly 3,124 of 8,606 strike triples at $0 tolerance and 2,727 at 1 cent, so this is far worse than SPY. SPX mids move in 5-10 cent steps, so the 1-cent tolerance is below one tick; the largest deficits I checked in the short expiries were 50-83 cents. I have not tried to repair them.
+- **Data quality:** 111 crossed quotes; only 12.6% of contracts that traded in the last 30 minutes had a last price inside the bid-ask, so mids are used throughout.
+
+![SPX smiles](figures/smile_spx.png)
+*SPX smiles for five expiries, 7 to 760 days; the long-dated curve has visible kinks in the far put wing.*
+
+![SPX ATM term structure](figures/term_structure_spx.png)
+*ATM IV by expiry, with VIX9D, VIX and VIX3M. The curve is inverted at the short end.*
 
 ## 4. Backtest
 
@@ -172,7 +191,7 @@ Each vol point of haircut moves the mean by about 22 bp per trade, against a net
 
 ## 5. What did not work
 
-- **No SPX surface** from the weekend snapshot (bids on 5% of rows).
+- **The first SPX snapshot was unusable** (taken on a weekend, bids on 5% of rows). The SPX surface above comes from a second download. That one was taken before the open, not during market hours, so it carries Monday's closing quotes, and one day of quotes is all I have.
 - **Residual butterfly arbitrage.** 61 violations at 1 cent, mostly in quarter-end and January 2029 expiries; counted, not repaired.
 - **Early-exercise bias measured, not corrected.** The long-dated SPY put wing is inverted as European, overstating IV by up to 2.37 vol points at 2 years.
 - **Short-dated implied dividend yields are meaningless.** Parity q at 7 days is 12.7%. Forward × DF for expiries up to 30 days implies a spot near 752.4 vs the reported 754.37, a 0.26% timing mismatch between spot and option closes that a small T blows up.
@@ -182,7 +201,7 @@ Each vol point of haircut moves the mean by about 22 bp per trade, against a net
 
 ## 6. Limitations
 
-- Synthetic option prices. VIX is not ATM IV; the gap is unknown historically and likely time-varying, and my one observation (about 4.1 points) is above break-even. VIX also has constant 30-day maturity while the option ages.
+- Synthetic option prices. VIX is not ATM IV; the gap is unknown historically and likely time-varying, and my two observations (about 4.1 points on SPY on a calm day, about 5.0 on SPX on a stress day) are above break-even. Two dates cannot say how the gap behaves over time. VIX also has constant 30-day maturity while the option ages.
 - Costs are assumed. Hedging is close-only; no intraday hedging, margin or capital limits; P&L is per straddle.
 - Small samples: 178 IS and 94 OOS trades.
 - Constant q = 1.8%; one flat T-bill rate for all maturities.
@@ -192,6 +211,6 @@ Each vol point of haircut moves the mean by about 22 bp per trade, against a net
 ## 7. What I would do next with real data
 
 - Historical SPX quotes (OptionMetrics or CBOE end-of-day) to replace synthetic pricing and measure the VIX − ATM gap month by month.
-- An SPX surface from a market-hours snapshot, where European exercise makes parity exact and removes the early-exercise bias.
+- SPX surfaces from snapshots taken during market hours, on many dates, to see how the VIX − ATM gap and the arbitrage violations vary (the one SPX surface here is a single post-close snapshot).
 - Per-expiry SVI fits with no-butterfly and no-calendar constraints.
 - SPY forwards and dividends estimated consistently with American exercise, jointly with the tree inversion.

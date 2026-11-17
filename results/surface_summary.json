@@ -692,27 +692,27 @@
   },
   "SPX": {
     "ticker": "SPX",
-    "snapshot_file": "spx_chain_20261115.csv",
-    "spot": 7561.67,
-    "snapshot_time_utc": "2026-11-15 07:17:35+00:00",
-    "valuation_time_utc": "2026-11-13 21:00:00+00:00",
-    "market_state": "CLOSED",
+    "snapshot_file": "spx_chain_20261117.csv",
+    "spot": 7416.59,
+    "snapshot_time_utc": "2026-11-17 08:59:57+00:00",
+    "valuation_time_utc": "2026-11-16 21:00:00+00:00",
+    "market_state": "PREPRE",
     "r": 0.0422,
     "r_quote_date": "2026-11-12",
     "data_quality": {
-      "rows": 20894,
-      "frac_bid_positive": 0.05,
-      "n_crossed_bid_gt_ask": 36,
-      "frac_last_trade_on_session_day": 0.4648,
-      "near_atm_otm_7_60d_n": 0,
-      "near_atm_otm_7_60d_median_spread_usd": null,
-      "near_atm_otm_7_60d_median_rel_spread": null,
-      "traded_last_30min_n": 0,
-      "traded_last_30min_frac_last_within_bid_ask": null,
-      "traded_last_30min_median_abs_last_minus_mid_over_spread": null
+      "rows": 20481,
+      "frac_bid_positive": 0.938,
+      "n_crossed_bid_gt_ask": 111,
+      "frac_last_trade_on_session_day": 0.5035,
+      "near_atm_otm_7_60d_n": 981,
+      "near_atm_otm_7_60d_median_spread_usd": 0.8,
+      "near_atm_otm_7_60d_median_rel_spread": 0.0081,
+      "traded_last_30min_n": 4321,
+      "traded_last_30min_frac_last_within_bid_ask": 0.1259,
+      "traded_last_30min_median_abs_last_minus_mid_over_spread": 2.8571
     },
     "filter_params": {
-      "spot": 7561.67,
+      "spot": 7416.59,
       "min_bid": 0.05,
       "max_rel_spread": 0.25,
       "min_dte": 7.0,
@@ -723,124 +723,956 @@
       ]
     },
     "filter_counts": {
-      "input": 20894,
+      "input": 20481,
       "missing_quote": 0,
-      "low_bid": 19849,
-      "crossed": 36,
-      "wide_spread": 24,
-      "dte_too_short": 0,
-      "dte_too_long": 50,
-      "moneyness": 178,
-      "output": 757
+      "low_bid": 1270,
+      "crossed": 111,
+      "wide_spread": 1156,
+      "dte_too_short": 1567,
+      "dte_too_long": 120,
+      "moneyness": 1452,
+      "output": 14805
     },
-    "status": "insufficient_data",
-    "message": "INSUFFICIENT DATA for SPX: 757 of 20894 rows survive cleaning (19849 removed for bid < 0.05); 1 usable expiries (need 3). Snapshot market_state=CLOSED: re-download during US market hours (09:30-16:00 New York) and re-run with --snapshot <file>.",
-    "dropped_expiries": [
+    "status": "ok",
+    "n_expiries": 46,
+    "n_quotes": 8698,
+    "n_outliers_removed": 60,
+    "outliers_by_expiry": {
+      "2026-11-30": 1,
+      "2026-12-31": 1,
+      "2027-03-31": 21,
+      "2027-06-30": 30,
+      "2027-09-30": 3,
+      "2028-01-21": 1,
+      "2028-06-16": 3
+    },
+    "dropped_expiries": [],
+    "expiries": [
       {
-        "expiry": "2026-11-20",
-        "T": 0.019178082191780823,
-        "reason": "only 0 call/put pairs (< 3)"
+        "expiry": "2026-11-23",
+        "dte": 7.0,
+        "F": 7402.7,
+        "q": 0.13994,
+        "F_reg": 7402.822,
+        "r_reg": 0.083,
+        "n_otm": 173,
+        "atm_iv": 0.202
+      },
+      {
+        "expiry": "2026-11-24",
+        "dte": 8.0,
+        "F": 7402.943,
+        "q": 0.12622,
+        "F_reg": 7403.045,
+        "r_reg": 0.2162,
+        "n_otm": 175,
+        "atm_iv": 0.2046
+      },
+      {
+        "expiry": "2026-11-25",
+        "dte": 9.0,
+        "F": 7404.575,
+        "q": 0.10795,
+        "F_reg": 7404.61,
+        "r_reg": 0.1189,
+        "n_otm": 172,
+        "atm_iv": 0.2044
+      },
+      {
+        "expiry": "2026-11-27",
+        "dte": 11.0,
+        "F": 7406.974,
+        "q": 0.08524,
+        "F_reg": 7406.985,
+        "r_reg": -0.0135,
+        "n_otm": 234,
+        "atm_iv": 0.194
       },
       {
         "expiry": "2026-11-30",
-        "T": 0.04657534246575343,
-        "reason": "only 0 call/put pairs (< 3)"
+        "dte": 14.0,
+        "F": 7407.629,
+        "q": 0.07371,
+        "F_reg": 7407.643,
+        "r_reg": 0.0465,
+        "n_otm": 322,
+        "atm_iv": 0.1831
+      },
+      {
+        "expiry": "2026-12-01",
+        "dte": 15.0,
+        "F": 7407.671,
+        "q": 0.07148,
+        "F_reg": 7407.734,
+        "r_reg": 0.0037,
+        "n_otm": 154,
+        "atm_iv": 0.1842
+      },
+      {
+        "expiry": "2026-12-02",
+        "dte": 16.0,
+        "F": 7407.366,
+        "q": 0.07059,
+        "F_reg": 7407.443,
+        "r_reg": 0.0305,
+        "n_otm": 150,
+        "atm_iv": 0.185
+      },
+      {
+        "expiry": "2026-12-03",
+        "dte": 17.0,
+        "F": 7407.731,
+        "q": 0.06786,
+        "F_reg": 7407.708,
+        "r_reg": 0.0527,
+        "n_otm": 143,
+        "atm_iv": 0.1858
+      },
+      {
+        "expiry": "2026-12-04",
+        "dte": 18.0,
+        "F": 7409.258,
+        "q": 0.06225,
+        "F_reg": 7409.272,
+        "r_reg": 0.0706,
+        "n_otm": 213,
+        "atm_iv": 0.1878
+      },
+      {
+        "expiry": "2026-12-07",
+        "dte": 21.0,
+        "F": 7409.55,
+        "q": 0.0587,
+        "F_reg": 7409.506,
+        "r_reg": 0.0729,
+        "n_otm": 117,
+        "atm_iv": 0.1802
+      },
+      {
+        "expiry": "2026-12-08",
+        "dte": 22.0,
+        "F": 7410.1,
+        "q": 0.05672,
+        "F_reg": 7410.235,
+        "r_reg": 0.0278,
+        "n_otm": 117,
+        "atm_iv": 0.1808
+      },
+      {
+        "expiry": "2026-12-09",
+        "dte": 23.0,
+        "F": 7411.004,
+        "q": 0.05415,
+        "F_reg": 7411.03,
+        "r_reg": 0.057,
+        "n_otm": 119,
+        "atm_iv": 0.1836
+      },
+      {
+        "expiry": "2026-12-10",
+        "dte": 24.0,
+        "F": 7411.741,
+        "q": 0.05214,
+        "F_reg": 7411.68,
+        "r_reg": 0.0449,
+        "n_otm": 116,
+        "atm_iv": 0.1859
+      },
+      {
+        "expiry": "2026-12-11",
+        "dte": 25.0,
+        "F": 7413.889,
+        "q": 0.04751,
+        "F_reg": 7413.893,
+        "r_reg": 0.0366,
+        "n_otm": 157,
+        "atm_iv": 0.1864
+      },
+      {
+        "expiry": "2026-12-14",
+        "dte": 28.0,
+        "F": 7414.331,
+        "q": 0.04617,
+        "F_reg": 7414.487,
+        "r_reg": 0.0384,
+        "n_otm": 99,
+        "atm_iv": 0.1807
+      },
+      {
+        "expiry": "2026-12-15",
+        "dte": 29.0,
+        "F": 7414.457,
+        "q": 0.04582,
+        "F_reg": 7414.559,
+        "r_reg": 0.0485,
+        "n_otm": 87,
+        "atm_iv": 0.1809
+      },
+      {
+        "expiry": "2026-12-16",
+        "dte": 30.0,
+        "F": 7415.165,
+        "q": 0.04453,
+        "F_reg": 7415.47,
+        "r_reg": 0.0164,
+        "n_otm": 81,
+        "atm_iv": 0.1796
+      },
+      {
+        "expiry": "2026-12-17",
+        "dte": 31.0,
+        "F": 7415.878,
+        "q": 0.04333,
+        "F_reg": 7415.975,
+        "r_reg": 0.0527,
+        "n_otm": 69,
+        "atm_iv": 0.1819
       },
       {
         "expiry": "2026-12-18",
-        "T": 0.0958904109589041,
-        "reason": "only 0 call/put pairs (< 3)"
+        "dte": 32.0,
+        "F": 7420.075,
+        "q": 0.03684,
+        "F_reg": 7418.825,
+        "r_reg": 0.1074,
+        "n_otm": 400,
+        "atm_iv": 0.1827
+      },
+      {
+        "expiry": "2026-12-21",
+        "dte": 35.0,
+        "F": 7418.85,
+        "q": 0.03902,
+        "F_reg": 7418.799,
+        "r_reg": 0.072,
+        "n_otm": 48,
+        "atm_iv": 0.1779
+      },
+      {
+        "expiry": "2026-12-22",
+        "dte": 36.0,
+        "F": 7419.686,
+        "q": 0.03796,
+        "F_reg": 7419.648,
+        "r_reg": 0.0493,
+        "n_otm": 37,
+        "atm_iv": 0.1785
+      },
+      {
+        "expiry": "2026-12-24",
+        "dte": 38.0,
+        "F": 7423.83,
+        "q": 0.03282,
+        "F_reg": 7424.148,
+        "r_reg": 0.0567,
+        "n_otm": 67,
+        "atm_iv": 0.1778
       },
       {
         "expiry": "2026-12-31",
-        "T": 0.13150684931506848,
-        "reason": "only 0 call/put pairs (< 3)"
+        "dte": 45.0,
+        "F": 7430.176,
+        "q": 0.02735,
+        "F_reg": 7430.309,
+        "r_reg": 0.1061,
+        "n_otm": 534,
+        "atm_iv": 0.1749
+      },
+      {
+        "expiry": "2027-01-08",
+        "dte": 53.0,
+        "F": 7438.235,
+        "q": 0.02213,
+        "F_reg": 7438.244,
+        "r_reg": 0.0443,
+        "n_otm": 108,
+        "atm_iv": 0.1729
       },
       {
         "expiry": "2027-01-15",
-        "T": 0.1726027397260274,
-        "reason": "only 0 call/put pairs (< 3)"
+        "dte": 60.0,
+        "F": 7445.052,
+        "q": 0.0189,
+        "F_reg": 7445.002,
+        "r_reg": 0.0119,
+        "n_otm": 396,
+        "atm_iv": 0.1717
+      },
+      {
+        "expiry": "2027-01-22",
+        "dte": 67.0,
+        "F": 7449.892,
+        "q": 0.01779,
+        "F_reg": 7449.927,
+        "r_reg": 0.0451,
+        "n_otm": 75,
+        "atm_iv": 0.1709
       },
       {
         "expiry": "2027-01-29",
-        "T": 0.21095890410958903,
-        "reason": "only 0 call/put pairs (< 3)"
+        "dte": 74.0,
+        "F": 7455.894,
+        "q": 0.01613,
+        "F_reg": 7455.979,
+        "r_reg": 0.068,
+        "n_otm": 446,
+        "atm_iv": 0.1716
       },
       {
         "expiry": "2027-02-19",
-        "T": 0.2684931506849315,
-        "reason": "only 0 call/put pairs (< 3)"
+        "dte": 95.0,
+        "F": 7471.347,
+        "q": 0.01393,
+        "F_reg": 7471.621,
+        "r_reg": 0.0473,
+        "n_otm": 357,
+        "atm_iv": 0.1701
+      },
+      {
+        "expiry": "2027-02-26",
+        "dte": 102.0,
+        "F": 7476.552,
+        "q": 0.01338,
+        "F_reg": 7476.542,
+        "r_reg": 0.0499,
+        "n_otm": 183,
+        "atm_iv": 0.1708
       },
       {
         "expiry": "2027-03-19",
-        "T": 0.34509132420091326,
-        "reason": "only 0 call/put pairs (< 3)"
+        "dte": 122.96,
+        "F": 7490.635,
+        "q": 0.01271,
+        "F_reg": 7490.792,
+        "r_reg": 0.0463,
+        "n_otm": 282,
+        "atm_iv": 0.1714
       },
       {
         "expiry": "2027-03-31",
-        "T": 0.37796803652968036,
-        "reason": "only 0 call/put pairs (< 3)"
+        "dte": 134.96,
+        "F": 7499.137,
+        "q": 0.01226,
+        "F_reg": 7499.151,
+        "r_reg": 0.0454,
+        "n_otm": 459,
+        "atm_iv": 0.1709
       },
       {
         "expiry": "2027-04-16",
-        "T": 0.4218036529680365,
-        "reason": "only 0 call/put pairs (< 3)"
+        "dte": 150.96,
+        "F": 7516.382,
+        "q": 0.00988,
+        "F_reg": 7516.291,
+        "r_reg": 0.0493,
+        "n_otm": 159,
+        "atm_iv": 0.1715
+      },
+      {
+        "expiry": "2027-04-30",
+        "dte": 164.96,
+        "F": 7529.635,
+        "q": 0.00872,
+        "F_reg": 7529.618,
+        "r_reg": 0.0478,
+        "n_otm": 163,
+        "atm_iv": 0.1729
       },
       {
         "expiry": "2027-05-21",
-        "T": 0.5176940639269406,
-        "reason": "only 0 call/put pairs (< 3)"
+        "dte": 185.96,
+        "F": 7545.623,
+        "q": 0.00834,
+        "F_reg": 7545.763,
+        "r_reg": 0.0506,
+        "n_otm": 160,
+        "atm_iv": 0.1742
       },
       {
         "expiry": "2027-06-17",
-        "T": 0.5916666666666667,
-        "reason": "only 0 call/put pairs (< 3)"
+        "dte": 212.96,
+        "F": 7568.307,
+        "q": 0.00749,
+        "F_reg": 7568.29,
+        "r_reg": 0.051,
+        "n_otm": 165,
+        "atm_iv": 0.1744
+      },
+      {
+        "expiry": "2027-06-30",
+        "dte": 225.96,
+        "F": 7577.148,
+        "q": 0.0076,
+        "F_reg": 7577.121,
+        "r_reg": 0.0487,
+        "n_otm": 367,
+        "atm_iv": 0.1747
       },
       {
         "expiry": "2027-07-16",
-        "T": 0.6711187214611872,
-        "reason": "only 0 call/put pairs (< 3)"
+        "dte": 241.96,
+        "F": 7594.95,
+        "q": 0.00635,
+        "F_reg": 7595.056,
+        "r_reg": 0.0495,
+        "n_otm": 158,
+        "atm_iv": 0.175
       },
       {
         "expiry": "2027-08-20",
-        "T": 0.7670091324200913,
-        "reason": "only 0 call/put pairs (< 3)"
+        "dte": 276.96,
+        "F": 7626.587,
+        "q": 0.0054,
+        "F_reg": 7626.582,
+        "r_reg": 0.0496,
+        "n_otm": 159,
+        "atm_iv": 0.1762
       },
       {
         "expiry": "2027-09-17",
-        "T": 0.8437214611872146,
-        "reason": "only 0 call/put pairs (< 3)"
+        "dte": 304.96,
+        "F": 7649.975,
+        "q": 0.00511,
+        "F_reg": 7649.763,
+        "r_reg": 0.0496,
+        "n_otm": 153,
+        "atm_iv": 0.177
       },
       {
         "expiry": "2027-09-30",
-        "T": 0.879337899543379,
-        "reason": "only 0 call/put pairs (< 3)"
+        "dte": 317.96,
+        "F": 7659.517,
+        "q": 0.0052,
+        "F_reg": 7659.614,
+        "r_reg": 0.0507,
+        "n_otm": 321,
+        "atm_iv": 0.1772
       },
       {
         "expiry": "2027-10-15",
-        "T": 0.9204337899543379,
-        "reason": "only 0 call/put pairs (< 3)"
+        "dte": 332.96,
+        "F": 7676.296,
+        "q": 0.00447,
+        "F_reg": 7676.384,
+        "r_reg": 0.0506,
+        "n_otm": 159,
+        "atm_iv": 0.1774
+      },
+      {
+        "expiry": "2027-11-19",
+        "dte": 368.0,
+        "F": 7707.909,
+        "q": 0.00398,
+        "F_reg": 7708.248,
+        "r_reg": 0.0514,
+        "n_otm": 165,
+        "atm_iv": 0.1779
       },
       {
         "expiry": "2027-12-17",
-        "T": 1.093150684931507,
-        "reason": "only 0 call/put pairs (< 3)"
+        "dte": 396.0,
+        "F": 7731.621,
+        "q": 0.00385,
+        "F_reg": 7731.636,
+        "r_reg": 0.0505,
+        "n_otm": 88,
+        "atm_iv": 0.178
       },
       {
         "expiry": "2028-01-21",
-        "T": 1.189041095890411,
-        "reason": "only 0 call/put pairs (< 3)"
+        "dte": 431.0,
+        "F": 7768.402,
+        "q": 0.00295,
+        "F_reg": 7767.636,
+        "r_reg": 0.0564,
+        "n_otm": 150,
+        "atm_iv": 0.1754
       },
       {
         "expiry": "2028-06-16",
-        "T": 1.5916666666666666,
-        "reason": "only 4 valid OTM IVs (< 8)"
+        "dte": 577.96,
+        "F": 7902.939,
+        "q": 0.00208,
+        "F_reg": 7913.72,
+        "r_reg": 0.0725,
+        "n_otm": 153,
+        "atm_iv": 0.1772
       },
       {
         "expiry": "2028-12-15",
-        "T": 2.0904109589041098,
-        "reason": "only 0 call/put pairs (< 3)"
+        "dte": 760.0,
+        "F": 8075.149,
+        "q": 0.00134,
+        "F_reg": 8074.126,
+        "r_reg": 0.0515,
+        "n_otm": 88,
+        "atm_iv": 0.1783
       }
-    ]
+    ],
+    "implied_spot_short_expiries": [
+      7396.712,
+      7396.1,
+      7396.874,
+      7397.561,
+      7395.65,
+      7394.837,
+      7393.677,
+      7393.187,
+      7393.856,
+      7391.583,
+      7391.277,
+      7391.325,
+      7391.205,
+      7392.493,
+      7390.37,
+      7389.641,
+      7389.492
+    ],
+    "sanity": {
+      "vix_family_date": "2026-11-16",
+      "vix9d": 0.2315,
+      "vix": 0.2291,
+      "vix3m": 0.2302,
+      "atm_iv_30d_minus_vix_volpts": -4.95,
+      "skew_iv_k-0.10_minus_k+0.10_30d": null,
+      "rr25_forward_delta_30d": {
+        "iv_call": 0.1527,
+        "k_call": 0.0305,
+        "iv_put": 0.2242,
+        "k_put": -0.0413,
+        "rr": 0.0715
+      },
+      "term_structure": {
+        "atm_iv_9d": 0.2044,
+        "atm_iv_30d": 0.1796,
+        "atm_iv_93d": 0.1702,
+        "atm_iv_365d": 0.1779,
+        "slope_93d_minus_30d_volpts": -0.94,
+        "slope_365d_minus_30d_volpts": -0.17,
+        "fit_volpts_per_log_dte": -0.439
+      },
+      "T_measurement_effect": [
+        {
+          "expiry": "2026-11-24",
+          "dte_valuation": 8.0,
+          "atm_iv_T_from_close": 0.2046,
+          "atm_iv_T_from_snapshot": 0.2113
+        },
+        {
+          "expiry": "2026-11-25",
+          "dte_valuation": 9.0,
+          "atm_iv_T_from_close": 0.2044,
+          "atm_iv_T_from_snapshot": 0.2103
+        },
+        {
+          "expiry": "2026-11-27",
+          "dte_valuation": 11.0,
+          "atm_iv_T_from_close": 0.194,
+          "atm_iv_T_from_snapshot": 0.1985
+        },
+        {
+          "expiry": "2026-11-30",
+          "dte_valuation": 14.0,
+          "atm_iv_T_from_close": 0.1831,
+          "atm_iv_T_from_snapshot": 0.1864
+        },
+        {
+          "expiry": "2026-12-01",
+          "dte_valuation": 15.0,
+          "atm_iv_T_from_close": 0.1842,
+          "atm_iv_T_from_snapshot": 0.1873
+        },
+        {
+          "expiry": "2026-12-02",
+          "dte_valuation": 16.0,
+          "atm_iv_T_from_close": 0.185,
+          "atm_iv_T_from_snapshot": 0.1879
+        }
+      ]
+    },
+    "arbitrage": {
+      "calendar_grid_points": 1845,
+      "calendar_violations": 7,
+      "calendar_detail": [
+        {
+          "expiry_1": "2026-12-22",
+          "expiry_2": "2026-12-24",
+          "n": 7,
+          "max_w_shortfall": 0.000108,
+          "k": -0.226
+        }
+      ],
+      "butterfly_triples": 8606,
+      "convexity_violations_tol0": 3124,
+      "convexity_violations_tol_1cent": 2727,
+      "monotonicity_violations_tol0": 119,
+      "monotonicity_violations_tol_1cent": 93,
+      "expiries_with_deficit_over_10c": [
+        {
+          "expiry": "2026-11-23",
+          "max_deficit_usd": 0.65
+        },
+        {
+          "expiry": "2026-11-24",
+          "max_deficit_usd": 0.68
+        },
+        {
+          "expiry": "2026-11-25",
+          "max_deficit_usd": 0.825
+        },
+        {
+          "expiry": "2026-11-27",
+          "max_deficit_usd": 0.65
+        },
+        {
+          "expiry": "2026-11-30",
+          "max_deficit_usd": 0.5
+        },
+        {
+          "expiry": "2026-12-01",
+          "max_deficit_usd": 0.55
+        },
+        {
+          "expiry": "2026-12-02",
+          "max_deficit_usd": 0.5
+        },
+        {
+          "expiry": "2026-12-03",
+          "max_deficit_usd": 0.55
+        },
+        {
+          "expiry": "2026-12-04",
+          "max_deficit_usd": 0.55
+        },
+        {
+          "expiry": "2026-12-07",
+          "max_deficit_usd": 0.633
+        },
+        {
+          "expiry": "2026-12-08",
+          "max_deficit_usd": 0.65
+        },
+        {
+          "expiry": "2026-12-09",
+          "max_deficit_usd": 0.475
+        },
+        {
+          "expiry": "2026-12-10",
+          "max_deficit_usd": 0.525
+        },
+        {
+          "expiry": "2026-12-11",
+          "max_deficit_usd": 0.633
+        },
+        {
+          "expiry": "2026-12-14",
+          "max_deficit_usd": 0.55
+        },
+        {
+          "expiry": "2026-12-15",
+          "max_deficit_usd": 0.475
+        },
+        {
+          "expiry": "2026-12-16",
+          "max_deficit_usd": 1.217
+        },
+        {
+          "expiry": "2026-12-17",
+          "max_deficit_usd": 0.407
+        },
+        {
+          "expiry": "2026-12-18",
+          "max_deficit_usd": 1.4
+        },
+        {
+          "expiry": "2026-12-22",
+          "max_deficit_usd": 0.15
+        },
+        {
+          "expiry": "2026-12-24",
+          "max_deficit_usd": 0.2
+        },
+        {
+          "expiry": "2026-12-31",
+          "max_deficit_usd": 0.75
+        },
+        {
+          "expiry": "2027-01-08",
+          "max_deficit_usd": 0.65
+        },
+        {
+          "expiry": "2027-01-15",
+          "max_deficit_usd": 1.225
+        },
+        {
+          "expiry": "2027-01-29",
+          "max_deficit_usd": 0.65
+        },
+        {
+          "expiry": "2027-02-19",
+          "max_deficit_usd": 1.025
+        },
+        {
+          "expiry": "2027-02-26",
+          "max_deficit_usd": 0.2
+        },
+        {
+          "expiry": "2027-03-19",
+          "max_deficit_usd": 1.325
+        },
+        {
+          "expiry": "2027-03-31",
+          "max_deficit_usd": 0.45
+        },
+        {
+          "expiry": "2027-04-16",
+          "max_deficit_usd": 0.325
+        },
+        {
+          "expiry": "2027-04-30",
+          "max_deficit_usd": 0.2
+        },
+        {
+          "expiry": "2027-05-21",
+          "max_deficit_usd": 0.408
+        },
+        {
+          "expiry": "2027-06-17",
+          "max_deficit_usd": 0.45
+        },
+        {
+          "expiry": "2027-06-30",
+          "max_deficit_usd": 9.483
+        },
+        {
+          "expiry": "2027-07-16",
+          "max_deficit_usd": 9.85
+        },
+        {
+          "expiry": "2027-08-20",
+          "max_deficit_usd": 9.375
+        },
+        {
+          "expiry": "2027-09-17",
+          "max_deficit_usd": 0.525
+        },
+        {
+          "expiry": "2027-09-30",
+          "max_deficit_usd": 0.375
+        },
+        {
+          "expiry": "2027-10-15",
+          "max_deficit_usd": 9.975
+        },
+        {
+          "expiry": "2027-11-19",
+          "max_deficit_usd": 0.65
+        },
+        {
+          "expiry": "2027-12-17",
+          "max_deficit_usd": 0.275
+        },
+        {
+          "expiry": "2028-01-21",
+          "max_deficit_usd": 15.725
+        },
+        {
+          "expiry": "2028-06-16",
+          "max_deficit_usd": 16.9
+        },
+        {
+          "expiry": "2028-12-15",
+          "max_deficit_usd": 12.6
+        }
+      ]
+    },
+    "european_vs_american": {
+      "n_options": 120,
+      "steps": 200,
+      "mean_diff_volpts": 0.203,
+      "max_abs_diff_volpts": 2.678,
+      "median_abs_diff_volpts": 0.039,
+      "by_kind_mean_volpts": {
+        "call": 0.006,
+        "put": 0.349
+      },
+      "table_mean_volpts": {
+        "(-0.45, -0.2]": {
+          "7": -0.219,
+          "30": -0.063,
+          "60": -0.031,
+          "123": 0.031,
+          "213": 0.123,
+          "318": 0.213,
+          "431": 0.298,
+          "760": 0.693
+        },
+        "(-0.2, -0.1]": {
+          "7": -0.037,
+          "30": -0.026,
+          "60": 0.042,
+          "123": 0.122,
+          "213": 0.225,
+          "318": 0.436,
+          "431": 0.584,
+          "760": 1.335
+        },
+        "(-0.1, -0.03]": {
+          "7": -0.047,
+          "30": 0.012,
+          "60": 0.07,
+          "123": 0.192,
+          "213": 0.48,
+          "318": 0.594,
+          "431": 1.137,
+          "760": 2.321
+        },
+        "(-0.03, 0.03]": {
+          "7": 0.082,
+          "30": 0.016,
+          "60": 0.081,
+          "123": 0.112,
+          "213": 0.014,
+          "318": 0.777,
+          "431": 0.007,
+          "760": 0.016
+        },
+        "(0.03, 0.1]": {
+          "7": 0.005,
+          "30": -0.013,
+          "60": -0.018,
+          "123": -0.001,
+          "213": 0.007,
+          "318": 0.0,
+          "431": -0.001,
+          "760": -0.007
+        },
+        "(0.1, 0.3]": {
+          "7": null,
+          "30": null,
+          "60": -0.025,
+          "123": -0.021,
+          "213": -0.025,
+          "318": -0.022,
+          "431": -0.009,
+          "760": -0.007
+        }
+      },
+      "table_eep_only_mean_volpts": {
+        "(-0.45, -0.2]": {
+          "7": -0.0,
+          "30": 0.001,
+          "60": 0.016,
+          "123": 0.048,
+          "213": 0.108,
+          "318": 0.203,
+          "431": 0.291,
+          "760": 0.677
+        },
+        "(-0.2, -0.1]": {
+          "7": -0.0,
+          "30": 0.001,
+          "60": 0.035,
+          "123": 0.1,
+          "213": 0.231,
+          "318": 0.422,
+          "431": 0.601,
+          "760": 1.325
+        },
+        "(-0.1, -0.03]": {
+          "7": -0.0,
+          "30": 0.001,
+          "60": 0.07,
+          "123": 0.184,
+          "213": 0.458,
+          "318": 0.574,
+          "431": 1.127,
+          "760": 2.308
+        },
+        "(-0.03, 0.03]": {
+          "7": 0.08,
+          "30": 0.006,
+          "60": 0.068,
+          "123": 0.108,
+          "213": -0.0,
+          "318": 0.772,
+          "431": -0.0,
+          "760": -0.0
+        },
+        "(0.03, 0.1]": {
+          "7": 0.026,
+          "30": 0.002,
+          "60": 0.0,
+          "123": -0.0,
+          "213": -0.0,
+          "318": 0.0,
+          "431": -0.0,
+          "760": -0.0
+        },
+        "(0.1, 0.3]": {
+          "7": null,
+          "30": null,
+          "60": 0.0,
+          "123": 0.0,
+          "213": -0.0,
+          "318": -0.0,
+          "431": 0.0,
+          "760": 0.0
+        }
+      },
+      "max_abs_eep_only_volpts": 2.664,
+      "tree_convergence_check": [
+        {
+          "expiry": "2028-12-15",
+          "strike": 7800.0,
+          "kind": "put",
+          "iv_am_200": 0.1605,
+          "iv_am_800": 0.16058,
+          "iv_eu": 0.18727
+        },
+        {
+          "expiry": "2028-12-15",
+          "strike": 7500.0,
+          "kind": "put",
+          "iv_am_200": 0.17612,
+          "iv_am_800": 0.1762,
+          "iv_eu": 0.19578
+        },
+        {
+          "expiry": "2028-12-15",
+          "strike": 7200.0,
+          "kind": "put",
+          "iv_am_200": 0.19008,
+          "iv_am_800": 0.19014,
+          "iv_eu": 0.20523
+        },
+        {
+          "expiry": "2028-01-21",
+          "strike": 7500.0,
+          "kind": "put",
+          "iv_am_200": 0.17534,
+          "iv_am_800": 0.1755,
+          "iv_eu": 0.18857
+        },
+        {
+          "expiry": "2027-09-30",
+          "strike": 7640.0,
+          "kind": "put",
+          "iv_am_200": 0.16516,
+          "iv_am_800": 0.16529,
+          "iv_eu": 0.17805
+        }
+      ]
+    },
+    "synthetic_american_bias": null,
+    "yahoo_iv_comparison": {
+      "n": 8698,
+      "median_yf_minus_ours_volpts": -0.08,
+      "median_abs_volpts": 0.83,
+      "by_kind_median_volpts": {
+        "call": 0.67,
+        "put": -0.74
+      }
+    }
   }
 }
