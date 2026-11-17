@@ -573,6 +573,10 @@ def main(argv: list[str] | None = None) -> int:
         o["w"] = o["iv"] ** 2 * o["T"]
         table = pd.concat([table, o[cols].assign(used=False)], ignore_index=True)
     table["expiry"] = pd.to_datetime(table["expiry"]).dt.date
+    # Raw third-party quote fields (Yahoo bid/ask/mid/volume/open interest and Yahoo's own IV)
+    # are not written to the committed results; only derived quantities are.
+    raw_cols = ["bid", "ask", "mid", "volume", "open_interest", "yf_iv"]
+    table = table.drop(columns=raw_cols, errors="ignore")
     table.sort_values(["expiry", "strike"]).to_csv(RES_DIR / f"surface_iv_{t}.csv", index=False)
 
     entry.update(
