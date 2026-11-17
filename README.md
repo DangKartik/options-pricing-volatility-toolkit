@@ -58,8 +58,8 @@ Developed with Python 3.14 (`pyproject.toml` allows 3.11+, untested).
 ```bash
 python -m venv .venv
 .venv/bin/pip install -e ".[dev]"
-.venv/bin/python -m pytest -q                 # 1496 passed; tests use synthetic data, no download needed
-.venv/bin/python scripts/download_data.py     # downloads market data into data/raw/ (needs network)
+.venv/bin/python -m pytest -q               # 1496 passed; synthetic data, no download
+.venv/bin/python scripts/download_data.py   # market data into data/raw/ (needs network)
 ```
 
 Then run the analysis, giving `--snapshot` the chain file the download printed:
@@ -67,7 +67,7 @@ Then run the analysis, giving `--snapshot` the chain file the download printed:
 ```bash
 .venv/bin/python scripts/build_surface.py --snapshot data/raw/spy_chain_<date>.csv
 .venv/bin/python scripts/build_surface.py --snapshot data/raw/spx_chain_<date>.csv --skip-bias-study
-.venv/bin/python scripts/run_backtest.py      # Parts A and B -> results/backtest_*, frozen_params.json, figures
+.venv/bin/python scripts/run_backtest.py    # Parts A and B -> results/backtest_*, figures
 ```
 
 ### About the data
